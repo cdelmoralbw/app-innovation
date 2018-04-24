@@ -1,6 +1,24 @@
 var express = require('express');
 var app = express();
 var pg = require('pg');
+var realtimeEditor = require('realtime-editor');
+
+var socket = io.connect();
+
+app.get('/text', function(request, response) {
+  var options = {
+    id: 'textarea1',
+    projectId: 'someUniqueIdentifier',
+  };
+   
+  var editor = new realtimeEditor(options);
+  
+  realtimeEditor.onSave(function(data) {
+    console.log(data);
+  });
+
+  response.render('pages/editor');
+})
 
 app.set('port', (process.env.PORT || 5000));
 
